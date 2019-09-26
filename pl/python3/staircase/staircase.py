@@ -30,7 +30,8 @@ import fire
 import pytest
 import logging
 import yaml
-from __main__ import __doc__ as doc
+from typing import List, Set
+
 
 # magic stanza unfortunately
 script = os.path.realpath(__file__)
@@ -52,7 +53,7 @@ def help():
     Dump the module doc above as a pretty-printed yaml file, currently broken.
     '''
     # TODO mike@carif.io: __name__.__doc__ doesn't get the string above?
-    print(yaml.dump(yaml.load(doc or '')))
+    print(yaml.dump(yaml.load(__name__.__doc__ or '')))
 
 
 
@@ -87,22 +88,40 @@ def testing(*argv):
     logger.debug(f'in {here()}')
     logger.debug(argv)
     # run the pytest tests in this file
-    return pytest.main(pytest_args)
-
+    return pytest.main(sys.argv)
 
 ## staircase
 
+def climb(n:int, steps:Set[int]) -> List[List[int]]:
+    assert all([s > 0 for s in steps])
+    return climb_helper(n, steps)
+
+def climb_helper(n:int, steps:Set[int]) -> List[List[int]]:
+    result = []
+    if n <= 0: return result
+
+    for s in steps:
+        if s > n: continue
+        if s == n:
+            result.append([s])
+            return result
+        # s < n, take the step
+        rest = climb(n - s, steps)
+        for r in rest: r.insert(0, s)
+        result.extend(rest)
+
+    return result
+
+def demo():
+    solutions = climb(5, set(range(1,4)))
+    print(solutions)
 
 
-
-
-
-
+# dispatching and error handling here
 def dispatch(*argv):
     logger.debug(sys.argv)
     logger.debug(f'{here()} {argv}')
     sys.exit(fire.Fire())
-
 
 # You can call main directly and get a trace and debugging on an unhandled exception.
 # See https://news.ycombinator.com/item?id=19075325
