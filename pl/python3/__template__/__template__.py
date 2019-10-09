@@ -7,7 +7,7 @@ doc:
   usage:
     bash: &usage env {__name__.upper()}_LOGLEVEL=DEBUG python3 {__name__}
   description: |
-  Text in git-flavored markdown
+   ${description}
   ```bash
   *usage
   ```

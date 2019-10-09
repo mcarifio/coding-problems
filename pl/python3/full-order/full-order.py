@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-f"""
+
+"""
+
 ---
 doc:
   format: yaml
@@ -7,11 +9,16 @@ doc:
   usage:
     bash: &usage env {__name__.upper()}_LOGLEVEL=DEBUG python3 {__name__}
   description: |
-  Text in git-flavored markdown
-  ```bash
-  *usage
-  ```
+  This problem was asked by Airbnb.
+
+  We're given a hashmap associating each courseId key with a list of courseIds values, which represents that the prerequisites of courseId are courseIds.
+  Return a sorted ordering of courses such that we can finish all courses.
+
+  Return null if there is no such ordering.
+
+  For example, given {'CSC300': ['CSC100', 'CSC200'], 'CSC200': ['CSC100'], 'CSC100': []}, should return ['CSC100', 'CSC200', 'CSCS300'].
 ---
+
 """
 
 import inspect
@@ -98,10 +105,18 @@ def testing(*argv):
 
 ## __name__
 
+def navigate(relations):
+    starting_points = set([k for k,v in relations.items() if len(v) == 0 ])
+    # logger.info(starting_points)
+    return "tbs"
+
+
+
 def start():
-    assert False, f"implement function {here()} or rename"
-
-
+    relations = {'CSC300': ['CSC100', 'CSC200'], 'CSC200': ['CSC100'], 'CSC100': []}
+    ordering = ['CSC100', 'CSC200', 'CSCS300']
+    solutions = navigate(relations)
+    logger.info(solutions)
 
 def demo():
     f"""

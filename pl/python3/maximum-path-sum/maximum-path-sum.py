@@ -7,8 +7,9 @@ doc:
   usage:
     bash: &usage env {__name__.upper()}_LOGLEVEL=DEBUG python3 {__name__}
   description: |
-   ${description}
-  Text in git-flavored markdown
+   This problem was asked by Google.
+
+   Given a binary tree of integers, find the maximum path sum between two nodes. The path must go through at least one node, and does not need to go through the root.
   ```bash
   *usage
   ```

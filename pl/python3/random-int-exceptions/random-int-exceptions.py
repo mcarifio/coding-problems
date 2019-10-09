@@ -5,11 +5,16 @@ doc:
   format: yaml
   name: {__name__}:script
   usage:
-    bash: &usage env {__name__.upper()}_LOGLEVEL=DEBUG python3 {__name__}
+    bash: &usage env {__name__.upper()}_LOGLEVEL=DEBUG python3 {__name__} demo
   description: |
-  Text in git-flavored markdown
+  Daily Coding Problem: Problem #90 [Medium]
+  
+  This question was asked by Google.
+  
+  Given an integer n and a list of integers l, write a function that randomly generates a number from 0 to n-1 that isn't in l (uniform).
+
   ```bash
-  *usage
+  python random-int-exceptions.py demo
   ```
 ---
 """
@@ -24,6 +29,8 @@ import fire
 import pytest
 import logging
 import yaml
+from typing import Set
+from random import randint
 
 # magic stanza unfortunately
 script = os.path.realpath(__file__)
@@ -96,10 +103,44 @@ def testing(*argv):
 
 
 
-## __name__
+## random-int-exceptions
+
+class RunawayIterationError(Exception):
+    f"""
+    Signal that an iteration took longer than it should have. Relies on the caller to know what that is.
+    """
+    def __init__(self, tries):
+        super()
+        self.tries = tries
+
+
+def gen_range_with_exceptions(_range:range, _exceptions: Set[int])->int:
+    f"""
+    Generate an int in [ _range.start, _range.stop ) that isn't in the set of exceptions _exceptions.
+    
+    All elements in _exceptions are assumed to be ints and also in the range _range. But the implementation still works
+    if they are outside the range.
+    """
+    
+    def candidate()->int:
+        return randint(_range.start, _range.stop)
+
+    tries = starting_tries = 1000
+    next = candidate()
+    while (next in _exceptions):
+        next = candidate()
+        tries -= 1
+        if not tries: raise RunawayIterationError(starting_tries)
+
+    return next
 
 def start():
-    assert False, f"implement function {here()} or rename"
+    ten = range(10)  # 0 to 9 inclusive
+    exclusions = set([1, 3, 5])
+    generated = gen_range_with_exceptions(ten, exclusions)
+    assert generated not in exclusions
+    assert ten.start <= generated < ten.stop
+    logger.info(f'{generated}')
 
 
 
